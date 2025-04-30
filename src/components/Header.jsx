@@ -51,7 +51,7 @@ function Header({ onData }) {
               className="lg:text-[80px] text-[29px] lg:leading-[60px] leading-[26px] pt-1"
               style={{ fontFamily: "Dancing Script" }}
             >
-              Nikah Junction
+              Nikah Junctionghdfgd
             </div>
             <p className="text-center inline-block lg:text-[14px] text-[7px] font-semibold lg:tracking-[14px] tracking-[5px]">
               Muslim Matrimony
