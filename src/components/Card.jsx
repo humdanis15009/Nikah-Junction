@@ -16,7 +16,7 @@ function Card() {
 
     let data = Number(import.meta.env.VITE_USERS) + userCount;
     let strr = data.toString();
-    let strrr = strr.substring(0, 2) + "," + strr.substring(2);
+    let strrr = strr.substring(0, 1) + "," + strr.substring(1);
 
     setStr(strrr);
 
@@ -38,7 +38,7 @@ function Card() {
                 {str}
               </span>
               <p className="lg:text-3xl text-[11px] text-gray-600">
-                No. of members
+                Digital members
               </p>
             </div>
           </div>
@@ -51,10 +51,10 @@ function Card() {
                 alt="stories"
               />
               <span className="lg:text-4xl text-xl lg:font-extrabold font-semibold mt-2 mb-3 lg:my-3">
-                5,761
+                35+
               </span>
               <p className="lg:text-3xl text-[11px] mb-3 text-gray-600">
-                Successful Stories
+                Digital Matches
               </p>
             </div>
           </div>
@@ -70,7 +70,7 @@ function Card() {
                 150+
               </span>
               <p className="lg:text-3xl text-[11px] text-gray-600">
-                Cities Presence
+                Partner cities
               </p>
             </div>
           </div>
