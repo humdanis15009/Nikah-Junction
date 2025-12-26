@@ -53,7 +53,7 @@ function Footer() {
 
       <div className="w-full border-t-2 border-yellow-500 mt-4 mb-3"></div>
 
-     <ul className="flex flex-wrap justify-center gap-2 text-[11px] lg:gap-8 lg:text-lg pb-1">
+     <ul className="flex flex-wrap justify-center gap-3 text-[11px] lg:gap-8 lg:text-lg pb-1">
         <li>
           <p
             onClick={scrollToTop}
