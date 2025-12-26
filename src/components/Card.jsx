@@ -67,7 +67,7 @@ function Card() {
                 alt="cities"
               />
               <span className="lg:text-4xl text-xl lg:font-extrabold font-semibold mt-2 lg:my-3">
-                150+
+                50+
               </span>
               <p className="lg:text-3xl text-[11px] text-gray-600">
                 Partner cities
