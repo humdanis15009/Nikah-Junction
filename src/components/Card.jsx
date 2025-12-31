@@ -51,7 +51,7 @@ function Card() {
                 alt="stories"
               />
               <span className="lg:text-4xl text-xl lg:font-extrabold font-semibold mt-2 mb-3 lg:my-3">
-                35+
+                90+
               </span>
               <p className="lg:text-3xl text-[11px] mb-3 text-gray-600">
                 Digital Matches
