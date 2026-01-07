@@ -19,7 +19,6 @@ const Picture = () => {
   const storage = getStorage();
   const firestore = getFirestore();
 
-  // Auth state listener
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -29,7 +28,6 @@ const Picture = () => {
     return () => unsubscribe();
   }, []);
 
-  // Fetch existing images
   useEffect(() => {
     const fetchExistingImages = async () => {
       if (!userId) return;
@@ -45,7 +43,8 @@ const Picture = () => {
           setMainImage(userData.mainImage || "");
         }
       } catch (error) {
-        console.error("Error fetching images:", error);
+        setModalMessage("Error loading images. Please refresh the page.");
+        setShowModal(true);
       } finally {
         setFetchingImages(false);
       }
@@ -54,7 +53,6 @@ const Picture = () => {
     fetchExistingImages();
   }, [userId, firestore]);
 
-  // Create and cleanup previews
   useEffect(() => {
     previews.forEach((preview) => URL.revokeObjectURL(preview));
 
@@ -111,7 +109,6 @@ const Picture = () => {
         const uniqueName = `${userId}_${Date.now()}_${file.name}`;
         const storageRef = ref(storage, `images/${uniqueName}`);
         
-        // Upload with metadata
         const metadata = {
           customMetadata: {
             userId: userId,
@@ -129,7 +126,6 @@ const Picture = () => {
           uploadedAt: new Date().toISOString()
         };
       } catch (error) {
-        console.error("Error compressing and uploading file:", error);
         return null;
       }
     });
@@ -160,7 +156,6 @@ const Picture = () => {
       setModalMessage("Images uploaded successfully!");
       setShowModal(true);
     } catch (error) {
-      console.error("Error uploading files:", error);
       setModalMessage("Upload failed. Please try again.");
       setShowModal(true);
     } finally {
@@ -174,9 +169,7 @@ const Picture = () => {
     const userDocRef = doc(firestore, "Biodata", userId);
     try {
       await updateDoc(userDocRef, { mainImage: imageUrl });
-      console.log("Main image updated successfully!");
     } catch (error) {
-      console.error("Error updating main image:", error);
       setModalMessage("Failed to set main image. Please try again.");
       setShowModal(true);
     }
@@ -189,15 +182,11 @@ const Picture = () => {
 
   const handleRemoveUploadedImage = async (imageToRemove) => {
     try {
-      // Extract the storage path from the URL or use the name
       let storagePath;
       
       if (imageToRemove.name) {
-        // If we have the name stored, use it directly
         storagePath = `images/${imageToRemove.name}`;
       } else {
-        // Extract path from Firebase Storage URL
-        // URL format: https://firebasestorage.googleapis.com/v0/b/bucket/o/images%2Ffilename?alt=media&token=...
         const url = imageToRemove.url || imageToRemove;
         const decodedUrl = decodeURIComponent(url);
         const pathMatch = decodedUrl.match(/\/o\/(.+?)\?/);
@@ -209,27 +198,19 @@ const Picture = () => {
         }
       }
 
-      console.log("Deleting from storage path:", storagePath);
-
-      // Delete from Firebase Storage
       const imageRef = ref(storage, storagePath);
       await deleteObject(imageRef);
-      console.log("Successfully deleted from Firebase Storage");
 
-      // Remove from Firestore
       const userDocRef = doc(firestore, "Biodata", userId);
       await updateDoc(userDocRef, {
         images: arrayRemove(imageToRemove)
       });
-      console.log("Successfully removed from Firestore");
 
-      // Update local state
       const updatedImages = uploadedImages.filter(
         (img) => (img.name ? img.name !== imageToRemove.name : img.url !== imageToRemove.url)
       );
       setUploadedImages(updatedImages);
 
-      // If deleted image was main image, set new main image
       const imageUrl = imageToRemove.url || imageToRemove;
       if (mainImage === imageUrl) {
         const newMainImage = updatedImages[0]?.url || "";
@@ -237,12 +218,10 @@ const Picture = () => {
         await updateDoc(userDocRef, { mainImage: newMainImage });
       }
 
-      setModalMessage("Image deleted successfully from storage and database!");
+      setModalMessage("Image deleted successfully!");
       setShowModal(true);
     } catch (error) {
-      console.error("Error deleting image:", error);
-      console.error("Error details:", error.message);
-      setModalMessage(`Failed to delete image: ${error.message}`);
+      setModalMessage("Failed to delete image. Please try again.");
       setShowModal(true);
     }
   };
@@ -282,7 +261,6 @@ const Picture = () => {
         )}
       </div>
 
-      {/* Uploaded Images Section */}
       {uploadedImages.length > 0 && (
         <div className="mb-6 w-full">
           <h3 className="text-xl font-semibold mb-3 text-center">Your Uploaded Images</h3>
@@ -323,7 +301,6 @@ const Picture = () => {
         </div>
       )}
 
-      {/* File Input */}
       {remainingSlots > 0 && (
         <div className="mb-4 w-full max-w-md">
           <label className="block mb-2 text-sm font-medium text-gray-700">
@@ -339,7 +316,6 @@ const Picture = () => {
         </div>
       )}
 
-      {/* Preview Section */}
       {previews.length > 0 && (
         <div className="mb-6 w-full">
           <h3 className="text-xl font-semibold mb-3 text-center">Preview (Not Uploaded Yet)</h3>
@@ -367,7 +343,6 @@ const Picture = () => {
         </div>
       )}
 
-      {/* Upload Button */}
       {selectedFiles.length > 0 && (
         <button
           onClick={handleUpload}
@@ -387,7 +362,6 @@ const Picture = () => {
         </button>
       )}
 
-      {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white p-6 rounded-lg shadow-xl text-center max-w-md w-full">
