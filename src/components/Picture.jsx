@@ -111,7 +111,16 @@ const Picture = () => {
         const uniqueName = `${userId}_${Date.now()}_${file.name}`;
         const storageRef = ref(storage, `images/${uniqueName}`);
         
-        await uploadBytes(storageRef, compressedFile);
+        // Upload with metadata
+        const metadata = {
+          customMetadata: {
+            userId: userId,
+            uploadedBy: auth.currentUser?.email || userId,
+            originalName: file.name
+          }
+        };
+        
+        await uploadBytes(storageRef, compressedFile, metadata);
         const downloadURL = await getDownloadURL(storageRef);
 
         return { 
