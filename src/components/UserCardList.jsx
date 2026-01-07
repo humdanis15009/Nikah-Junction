@@ -12,7 +12,7 @@ const UserCardList = () => {
   const [uid, setUserId] = useState("");
   const [amount] = useState(1000);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const merchantUpiId = "humdanis173@oksbi";
+  const merchantUpiId = "9807419006@kotak811";
   const userName = "Nikah Junction";
 
   const upiUrl = `upi://pay?pa=${merchantUpiId}&pn=${encodeURIComponent(
