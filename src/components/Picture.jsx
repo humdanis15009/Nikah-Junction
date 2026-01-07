@@ -180,34 +180,60 @@ const Picture = () => {
 
   const handleRemoveUploadedImage = async (imageToRemove) => {
     try {
+      // Extract the storage path from the URL or use the name
+      let storagePath;
+      
+      if (imageToRemove.name) {
+        // If we have the name stored, use it directly
+        storagePath = `images/${imageToRemove.name}`;
+      } else {
+        // Extract path from Firebase Storage URL
+        // URL format: https://firebasestorage.googleapis.com/v0/b/bucket/o/images%2Ffilename?alt=media&token=...
+        const url = imageToRemove.url || imageToRemove;
+        const decodedUrl = decodeURIComponent(url);
+        const pathMatch = decodedUrl.match(/\/o\/(.+?)\?/);
+        
+        if (pathMatch && pathMatch[1]) {
+          storagePath = pathMatch[1];
+        } else {
+          throw new Error("Could not extract storage path from URL");
+        }
+      }
+
+      console.log("Deleting from storage path:", storagePath);
+
       // Delete from Firebase Storage
-      const imageRef = ref(storage, `images/${imageToRemove.name}`);
+      const imageRef = ref(storage, storagePath);
       await deleteObject(imageRef);
+      console.log("Successfully deleted from Firebase Storage");
 
       // Remove from Firestore
       const userDocRef = doc(firestore, "Biodata", userId);
       await updateDoc(userDocRef, {
         images: arrayRemove(imageToRemove)
       });
+      console.log("Successfully removed from Firestore");
 
       // Update local state
       const updatedImages = uploadedImages.filter(
-        (img) => img.name !== imageToRemove.name
+        (img) => (img.name ? img.name !== imageToRemove.name : img.url !== imageToRemove.url)
       );
       setUploadedImages(updatedImages);
 
       // If deleted image was main image, set new main image
-      if (mainImage === imageToRemove.url) {
+      const imageUrl = imageToRemove.url || imageToRemove;
+      if (mainImage === imageUrl) {
         const newMainImage = updatedImages[0]?.url || "";
         setMainImage(newMainImage);
         await updateDoc(userDocRef, { mainImage: newMainImage });
       }
 
-      setModalMessage("Image deleted successfully!");
+      setModalMessage("Image deleted successfully from storage and database!");
       setShowModal(true);
     } catch (error) {
       console.error("Error deleting image:", error);
-      setModalMessage("Failed to delete image. Please try again.");
+      console.error("Error details:", error.message);
+      setModalMessage(`Failed to delete image: ${error.message}`);
       setShowModal(true);
     }
   };
