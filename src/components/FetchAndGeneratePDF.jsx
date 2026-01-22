@@ -17,12 +17,13 @@ const FetchAndGeneratePDF = ({ userId }) => {
         const userDocRef = doc(db, "Biodata", userId);
         const userDoc = await getDoc(userDocRef);
 
-        if (userDoc.exists()) {
-          const userData = userDoc.data();
-          const userImages = userData.imageUrls || [];
+        const userImages =
+            userData.imageUrls?.length > 0
+              ? userData.imageUrls
+              : userData.images?.map(img => img.url) || [];
+
           setUser(userData);
-          setImages(userImages.slice(0, 3));
-          ``;
+          setImages(userImages);
         } else {
           console.log("No such document!");
         }
