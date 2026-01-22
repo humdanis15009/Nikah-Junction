@@ -17,7 +17,9 @@ const FetchAndGeneratePDF = ({ userId }) => {
         const userDocRef = doc(db, "Biodata", userId);
         const userDoc = await getDoc(userDocRef);
 
-        const userImages =
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          const userImages =
             userData.imageUrls?.length > 0
               ? userData.imageUrls
               : userData.images?.map(img => img.url) || [];
