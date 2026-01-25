@@ -63,7 +63,7 @@ function AboutUs() {
             that aligns with Islamic values and principles.
           </p>
 
-          <h2 className="lg:text-2xl text-lg font-semibold text-gray-800 lg:mb-4">
+          {/* <h2 className="lg:text-2xl text-lg font-semibold text-gray-800 lg:mb-4">
             Our Founder:
           </h2>
           <div className="lg:flex items-center lg:mb-6">
@@ -97,7 +97,7 @@ function AboutUs() {
               . His dedication and commitment to providing a respectful and
               reliable service form the cornerstone of our platform.
             </p>
-          </div>
+          </div> */}
 
           <h2 className="lg:text-2xl text-lg font-semibold text-gray-800 lg:mb-4 mt-4">
             Our Mission:
