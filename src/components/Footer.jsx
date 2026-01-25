@@ -42,7 +42,7 @@ function Footer() {
 
       <div className="max-w-3xl mx-auto text-center">
         <p className="lg:text-[16px] text-[12px] leading-relaxed opacity-90">
-          Serving offline since 1994 — now online to serve you better. We, at
+          Serving offline now online to serve you better. We, at
           Nikah Junction, are committed to helping you find the perfect one
           <span className="hidden lg:inline">
             {" "}
