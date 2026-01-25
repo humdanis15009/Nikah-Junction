@@ -81,7 +81,7 @@ const Faq = () => {
               Is there a fee to use the site?
             </h2>
             <blockquote className="lg:border-l-4 border-l-2 border-blue-500 lg:text-[18px] text-[16px] pl-4 italic text-gray-700">
-              &ldquo;We charge Rs.500 only for registration after you fill up
+              &ldquo;We charge Rs.1000 only for registration after you fill up
               your biodata. These charges are applicable till you get married
               and after that we have our service fulfillment charges.&rdquo;
             </blockquote>
